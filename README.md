@@ -1,5 +1,24 @@
 # Frontend
 
+Das Frontend besteht aus einem Spring-Server, der eine React-App ausliefert.
+Der Spring-Code liegt unter `src/main/java`, der vermutlich komplexere React-Code unter `src/main/js`.
+
+## Lokal starten
+
+Um das Frontend normal lokal zu starten, nutze entweder die "Start"-Funktion von IDEA oder `mvn spring-boot:start` in der Konsole.
+
+## React + Webpack
+
+React ist ein Framework um moderne und dynamische Webseiten einfacher zu schreiben.
+
+Die `app.js` ist hierbei der Entrypoint (equivalent zur `static void main`).
+
+Beim Starten der App wird automatisch der React-JavaScript-Code von Babel in Browser-verständlichen ES5-JavaScript-Code übersetzt und anschließend von Webpack "kompiliert" in `src/main/resources/static/built/bundle.js`.
+
+Diese `bundle.js` wird in der `index.html` unter `src/main/resources/templates` eingebunden.
+
+Um die React-App bei Code-Änderungen zu aktualisieren, während der Spring-Server läuft, öffne ein Terminal und starte `target\node\yarn\dist\bin\yarn watch`.
+
 ## Docker
 
 Um das Frontend mit Docker zu starten
