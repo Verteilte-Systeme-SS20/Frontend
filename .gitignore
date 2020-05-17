@@ -77,9 +77,6 @@ cmake-build-*/
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 
-# File-based project format
-*.iws
-
 # IntelliJ
 out/
 
@@ -123,3 +120,6 @@ fabric.properties
 .idea/**/markdown-navigator/
 
 # End of https://www.gitignore.io/api/intellij
+
+node_modules/
+yarn.lock/
