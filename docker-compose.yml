@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  frontend:
+    container_name: vs_frontend
+    restart: on-failure
+    build: .
+    ports:
+      - "8000:8888"
