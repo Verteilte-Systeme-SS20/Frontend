@@ -41,7 +41,7 @@ function TischList() {
         ]);
         /*
         // Fetch data
-        axios.get('http://' + window.location.host + '/api').then(res => {
+        axios.get('/api/v1/tische').then(res => {
             const parsedTische = res.data.map(d => new Tisch(d.name, d.seats));
             setTische(parsedTische);
             setLoading(false);

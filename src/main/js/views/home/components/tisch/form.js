@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -29,6 +30,12 @@ function TischForm() {
 
     function onSubmit(data) {
         console.log("Submitting", data);
+
+        axios.post('/api/v1/tables').then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
     return<Grid item xs={2}>
