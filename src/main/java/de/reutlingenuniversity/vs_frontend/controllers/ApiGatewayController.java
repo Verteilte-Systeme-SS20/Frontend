@@ -1,9 +1,12 @@
 package de.reutlingenuniversity.vs_frontend.controllers;
 
+import de.reutlingenuniversity.vs_frontend.models.AbrechnungDTO;
 import de.reutlingenuniversity.vs_frontend.models.TableDTO;
 import de.reutlingenuniversity.vs_frontend.restclients.TableClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -20,6 +23,11 @@ public class ApiGatewayController {
     @GetMapping(value = "/tables")
     public List<TableDTO> getTables() {
         return tableClient.getTables();
+    }
+
+    @PostMapping(value = "/sendAbrechnung")
+    public void sendAbrechnung(@RequestBody AbrechnungDTO abrechnungDTO) {
+        // Send to website client via Websocket
     }
     /*
 
