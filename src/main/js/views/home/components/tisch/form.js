@@ -31,7 +31,9 @@ function TischForm() {
     function onSubmit(data) {
         console.log("Submitting", data);
 
-        axios.post('/api/v1/tables').then(res => {
+        const tischDto = null;
+
+        axios.post('/api/v1/tables', tischDto).then(res => {
             console.log(res);
         }).catch(err => {
             console.error(err);

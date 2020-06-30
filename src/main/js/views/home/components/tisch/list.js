@@ -53,7 +53,6 @@ function TischList() {
             ]),
             new Tisch('Tisch', 3,3, [])
         ]);
-        /*
         // Fetch data
         axios.get('/api/v1/tische').then(res => {
             const parsedTische = res.data.map(d => new Tisch(d.name, d.seats));
@@ -63,19 +62,39 @@ function TischList() {
             setError(err);
             setLoading(false);
             console.error(err);
-        });*/
+        });
     }, []);
 
-    function handleGetAbrechnung(tischNr) {
+    function handleGetAbrechnung(tischNr, sitzplatzNr) {
         console.log("Abrechnung", tischNr);
+
+        axios.get(`/api/v1/bestellungen/abgrechnet/${tischNr}/${sitzplatzNr}`).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
     function handleAddSitzplatz(tischNr) {
         console.log("Add sitzplatz", tischNr);
+
+        const tischDto = null;
+
+        axios.put(`/api/v1/tische/${tischNr}/`, tischDto).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
-    function handleAddBestellung(tischNr, position) {
-        console.log("Add", tischNr, position)
+    function handleAddBestellung(tischNr, sitzplatzNr, gerichtId) {
+        console.log("Add", tischNr, sitzplatzNr, gerichtId);
+
+        axios.post(`/api/v1/bestellungen/${tischNr}/${sitzplatzNr}/${gerichtId}`).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
 
@@ -118,7 +137,7 @@ function TischList() {
                                     className={classes.button}
                                     startIcon={<Add />}
                                     size="small"
-                                    onClick={() => handleAddBestellung(tisch.tischNr, sitzplatz.sitzplatzNr)}
+                                    onClick={() => handleAddBestellung(tisch.tischNr, sitzplatz.sitzplatzNr, 0)}
                                 >
                                     Bestellung
                                 </Button>
