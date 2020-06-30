@@ -4,18 +4,16 @@ import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
-import { Tisch } from '../../../../models';
+import { Bestellung, Tisch, Sitzplatz } from '../../../../models';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
+import { Add, Send } from '@material-ui/icons';
+import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import { AccountCircle, Add } from '@material-ui/icons';
-import IconButton from '@material-ui/core/IconButton';
+import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
 
 const useStyles = makeStyles(theme => ({
     listPaper: {
@@ -24,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     divider: {
         margin: theme.spacing(2, 0, 2, 0),
     },
+    tisch: {
+        background: '#F5F5F5'
+    }
 }));
 
 function TischList() {
@@ -35,9 +36,22 @@ function TischList() {
     useEffect(() => {
         // For testing
         setTische([
-            new Tisch('Tisch 1', [1, 2]),
-            new Tisch('Tisch 2', [1]),
-            new Tisch('Tisch 3', [1, 2, 3])
+            new Tisch('Tisch', 1, 1, [
+                new Sitzplatz(1, 1, [
+                    new Bestellung(1, "Schnitzel"),
+                    new Bestellung(2, "Cola")
+                ]),
+                new Sitzplatz(2, 1, [
+                    new Bestellung(1, "Schnitzel"),
+                    new Bestellung(2, "Cola")
+                ])
+            ]),
+            new Tisch('Tisch', 2,2, [
+                new Sitzplatz(1, 2, [
+                    new Bestellung(3, "Pommes")
+                ])
+            ]),
+            new Tisch('Tisch', 3,3, [])
         ]);
         /*
         // Fetch data
@@ -52,31 +66,75 @@ function TischList() {
         });*/
     }, []);
 
+    function handleGetAbrechnung(tischNr) {
+        console.log("Abrechnung", tischNr);
+    }
+
+    function handleAddSitzplatz(tischNr) {
+        console.log("Add sitzplatz", tischNr);
+    }
+
+    function handleAddBestellung(tischNr, position) {
+        console.log("Add", tischNr, position)
+    }
+
 
     const cards = tische.map(tisch => {
-        return <Grid item key={tisch.name}>
-            <Card xs={2}>
+        return <Grid item key={tisch.tischNr} xs={4}>
+            <Card className={classes.tisch}>
                 <CardHeader
-                    title={tisch.name}
+                    title={tisch.name + ' ' + tisch.tischNr}
                 />
                 <CardContent>
-                    <List>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                className={classes.button}
+                                startIcon={<Send />}
+                                onClick={() => handleGetAbrechnung(tisch.tischNr)}
+                            >
+                                Abrechnung
+                            </Button>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                className={classes.button}
+                                startIcon={<Add />}
+                                onClick={() => handleAddSitzplatz(tisch.tischNr)}
+                            >
+                                Sitzplatz
+                            </Button>
+                        </Grid>
                         {
-                            tisch.positionen.map(position => <ListItem key={position}>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <AccountCircle />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="delete">
-                                        <Add />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-
-                            </ListItem>)
+                            tisch.sitzplaetze.map(sitzplatz => <Grid item key={sitzplatz.sitzplatzNr} xs={6}>
+                                <Typography variant="subtitle1">Platz {sitzplatz.sitzplatzNr}</Typography>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    className={classes.button}
+                                    startIcon={<Add />}
+                                    size="small"
+                                    onClick={() => handleAddBestellung(tisch.tischNr, sitzplatz.sitzplatzNr)}
+                                >
+                                    Bestellung
+                                </Button>
+                                <List dense>
+                                    {
+                                        sitzplatz.bestellungen.map(bestellung => <ListItem key={bestellung.gerichtsName}>
+                                            <ListItemText
+                                                primary={bestellung.gerichtsName}
+                                            />
+                                        </ListItem>)
+                                    }
+                                </List>
+                                <Divider className={classes.divider}/>
+                            </Grid>)
                         }
-                    </List>
+                    </Grid>
                 </CardContent>
             </Card>
         </Grid>;
