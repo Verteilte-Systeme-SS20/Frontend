@@ -1,6 +1,6 @@
 export default class Bestellung {
-    constructor(gerichtsId, gerichtsName) {
-        this.gerichtsId = gerichtsId
-        this.gerichtsName = gerichtsName;
+    constructor(timestamp, gericht) {
+        this.timestamp = timestamp;
+        this.gericht = gericht;
     }
 }
