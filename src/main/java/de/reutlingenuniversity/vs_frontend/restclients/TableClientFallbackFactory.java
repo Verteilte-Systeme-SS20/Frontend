@@ -1,7 +1,8 @@
 package de.reutlingenuniversity.vs_frontend.restclients;
 
-import de.reutlingenuniversity.vs_frontend.models.TableDTO;
+import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import feign.hystrix.FallbackFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,7 +24,17 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
         }
 
         @Override
-        public List<TableDTO> getTables() {
+        public List<TischDTO> getTables() {
+            return null;
+        }
+
+        @Override
+        public ResponseEntity<Object> createTable(int tischNr, int sitzplaetze) {
+            return null;
+        }
+
+        @Override
+        public ResponseEntity<Object> updateSeatsOfTable(int tischNr, int anzSitzpleatze) {
             return null;
         }
     }

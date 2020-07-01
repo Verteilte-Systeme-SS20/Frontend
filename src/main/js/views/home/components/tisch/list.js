@@ -34,33 +34,9 @@ const useStyles = makeStyles(theme => ({
 
 function TischList() {
     const classes = useStyles();
-    const bspGerichte = [
-        new Gericht(0, 'Schnitzel', 50.0),
-        new Gericht(1, 'Pommes', 10.0),
-        new Gericht(2, 'Cola', 5.0),
-        new Gericht(3, 'Kartoffel', 4.0),
-    ];
-    const bspTische = [
-        new Tisch('Tisch', 1, 1, [
-            new Sitzplatz(1, 1, [
-                new Bestellung(null, bspGerichte[0]),
-                new Bestellung(null, bspGerichte[1])
-            ]),
-            new Sitzplatz(2, 1, [
-                new Bestellung(null, bspGerichte[1]),
-                new Bestellung(null, bspGerichte[2])
-            ])
-        ]),
-        new Tisch('Tisch', 2,2, [
-            new Sitzplatz(1, 2, [
-                new Bestellung(null, bspGerichte[3])
-            ])
-        ]),
-        new Tisch('Tisch', 3,3, [])
-    ];
 
-    const [tische, setTische] = useState(bspTische);
-    const [gerichte, setGerichte] = useState(bspGerichte);
+    const [tische, setTische] = useState([]);
+    const [gerichte, setGerichte] = useState([]);
 
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -72,7 +48,8 @@ function TischList() {
     useEffect(() => {
         // Fetch tische
         axios.get('/api/v1/tische').then(res => {
-            const parsedTische = res.data.map(d => new Tisch(d.name, d.seats));
+            console.log("tische", res.data);
+            const parsedTische = res.data.map(d => new Tisch(d.anzSitzplaetze, d.bestellungen ?? [], d.description, d.id, d.nr));
             setTische(parsedTische);
             setLoading(false);
         }).catch(err => {
@@ -83,7 +60,7 @@ function TischList() {
 
         // Fetch gerichte
         axios.get('/api/v1/gerichte').then(res => {
-            const parsedGerichte = res.data.map(g => new Gericht(g.id, g.name, g.preis));
+            const parsedGerichte = res.data.map(g => new Gericht(g.name, g.preis));
             setGerichte(parsedGerichte);
             setLoading(false);
         }).catch(err => {
@@ -106,12 +83,16 @@ function TischList() {
     function handleAddSitzplatz(tischNr) {
         console.log("Add sitzplatz", tischNr);
 
-        const tischDto = null;
+        const tisch = tische.filter(t => t.nr === tischNr)[0];
+        const newSitzplaetze = tisch.anzSitzplaetze + 1;
+        console.log("newSitzplaetze", `/api/v1/tische/${tisch.nr}/${newSitzplaetze}`);
 
-        axios.put(`/api/v1/tische/${tischNr}/`, tischDto).then(res => {
-            console.log(res);
+        axios.put(`/api/v1/tische/${tisch.nr}/${newSitzplaetze}`).then(res => {
+            console.log('Neuer tisch', res.data);
+            setError(null);
         }).catch(err => {
-            console.error(err);
+            console.error(err, err.response.data);
+            setError(err.response.data);
         });
     }
 
@@ -134,7 +115,7 @@ function TischList() {
         return <Grid item key={tisch.tischNr} xs={4}>
             <Card className={classes.tisch}>
                 <CardHeader
-                    title={tisch.name + ' ' + tisch.tischNr}
+                    title={'Tisch ' + tisch.nr + ' Sitzplätze: ' + tisch.anzSitzplaetze}
                 />
                 <CardContent>
                     <Grid container spacing={2}>
@@ -144,13 +125,13 @@ function TischList() {
                                 color="secondary"
                                 className={classes.button}
                                 startIcon={<Add />}
-                                onClick={() => handleAddSitzplatz(tisch.tischNr)}
+                                onClick={() => handleAddSitzplatz(tisch.nr)}
                             >
                                 Sitzplatz
                             </Button>
                         </Grid>
                         {
-                            tisch.sitzplaetze.map(sitzplatz => <Grid item key={sitzplatz.sitzplatzNr} xs={6}>
+                            tisch.bestellungen.map(sitzplatz => <Grid item key={sitzplatz.sitzplatzNr} xs={6}>
                                 <Typography variant="subtitle1">Platz {sitzplatz.sitzplatzNr}</Typography>
                                 <Button
                                     variant="contained"
@@ -158,7 +139,7 @@ function TischList() {
                                     className={classes.button}
                                     startIcon={<Send />}
                                     size="small"
-                                    onClick={() => handleGetAbrechnung(tisch.tischNr, sitzplatz.sitzplatzNr)}
+                                    onClick={() => handleGetAbrechnung(tisch.nr, sitzplatz.sitzplatzNr)}
                                 >
                                     Abrechnung
                                 </Button>
@@ -169,7 +150,7 @@ function TischList() {
                                     className={classes.button}
                                     startIcon={<Add />}
                                     size="small"
-                                    onClick={() => handleAddBestellung(tisch.tischNr, sitzplatz.sitzplatzNr)}
+                                    onClick={() => handleAddBestellung(tisch.nr, sitzplatz.sitzplatzNr)}
                                 >
                                     Bestellung
                                 </Button>

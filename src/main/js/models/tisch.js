@@ -1,8 +1,9 @@
 export default class Tisch {
-    constructor(name, tischNr, anzSitzplaetze, sitzplaetze) {
-        this.name = name;
-        this.tischNr = tischNr;
+    constructor(anzSitzplaetze, bestellungen, description, id, nr) {
         this.anzSitzplaetze = anzSitzplaetze;
-        this.sitzplaetze = sitzplaetze ?? [];
+        this.bestellungen = bestellungen;
+        this.description = description;
+        this.id = id;
+        this.nr = nr;
     }
 }

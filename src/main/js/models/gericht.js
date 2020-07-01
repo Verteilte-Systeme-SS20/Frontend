@@ -1,6 +1,5 @@
 export default class Gericht {
-    constructor(id, name, preis) {
-        this.id = id;
+    constructor(name, preis) {
         this.name = name;
         this.preis = preis;
     }

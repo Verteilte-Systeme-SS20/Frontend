@@ -1,5 +1,5 @@
 import Grid from '@material-ui/core/Grid';
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -27,18 +27,19 @@ const useStyles = makeStyles(theme => ({
 function TischForm() {
     const classes = useStyles();
     const { register, handleSubmit, watch, errors } = useForm();
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     function onSubmit(data) {
-        console.log("Submitting", data);
-
-        const tischDto = null;
-
-        axios.post('/api/v1/tables', tischDto).then(res => {
+        axios.post(`/api/v1/tische/${data.nummer}/${data.positionen}`).then(res => {
             console.log(res);
+            setError(null);
         }).catch(err => {
-            console.error(err);
+            setError(err.response.data);
         });
     }
+
+    console.log(error);
 
     return<Grid item xs={2}>
         <Paper className={classes.formPaper}>
@@ -50,11 +51,12 @@ function TischForm() {
                     className={classes.input}
                     fullWidth
                     required
-                    label="Tischname"
-                    name="name"
+                    label="Tischnummer"
+                    name="nummer"
+                    type="number"
                     inputRef={register({required: true})}
                 />
-                {errors.name && <span className={classes.inputError}>Pflichtfeld</span>}
+                {errors.nummer && <span className={classes.inputError}>Pflichtfeld</span>}
                 <TextField
                     className={classes.input}
                     fullWidth
@@ -67,6 +69,7 @@ function TischForm() {
                 {errors.positionen && <span className={classes.inputError}>Muss zwischen 0 und 50 sein</span>}
                 <Divider className={classes.divider} />
                 <Button color="primary" type="submit">Erstellen</Button>
+                <span className={classes.inputError}>{error}</span>
             </form>
         </Paper>
     </Grid>
