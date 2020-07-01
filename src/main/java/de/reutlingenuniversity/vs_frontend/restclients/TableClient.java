@@ -22,5 +22,13 @@ public interface TableClient {
 
     @PutMapping("v1/tische/{tischNr}/{anzSitzplaetze}")
     ResponseEntity<Object> updateSeatsOfTable(@PathVariable("tischNr") final int tischNr,
-                                              @PathVariable("anzSitzplaetze") final int anzSitzpleatze);
+                                              @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
+
+    @PostMapping("v1/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    ResponseEntity<Object> tischAbrechnen(@PathVariable("tischNr") final int tischNr,
+                                              @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
+
+    @PutMapping("v1/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    ResponseEntity<Object> tischAbgerechnet(@PathVariable("tischNr") final int tischNr,
+                                          @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
 }

@@ -45,10 +45,10 @@ public class ApiGatewayController {
 
     @PutMapping(value = "/tische/{tischNr}/{anzSitzplaetze}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Object> updateSeatsOfTable(@PathVariable("tischNr") final int tischNr,
-                                              @PathVariable("anzSitzplaetze") final int anzSitzpleatze){
+                                              @PathVariable("anzSitzplaetze") final int anzSitzplaetze){
         ResponseEntity<Object> response;
         try {
-            response = tableClient.updateSeatsOfTable(tischNr, anzSitzpleatze);
+            response = tableClient.updateSeatsOfTable(tischNr, anzSitzplaetze);
         } catch (FeignException e) {
             response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
         }
@@ -61,9 +61,28 @@ public class ApiGatewayController {
         return gerichtClient.getAll();
     }
 
-    @PostMapping(value = "/sendAbrechnung", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void sendAbrechnung(@RequestBody AbrechnungDTO abrechnungDTO) {
-        // Send to website client via Websocket
+    @PostMapping("/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    ResponseEntity<Object> tischAbrechnen(@PathVariable("tischAbrechnenischNr") final int tischNr,
+                                          @PathVariable("anzSitzplaetze") final int anzSitzplaetze) {
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.tischAbrechnen(tischNr, anzSitzplaetze);
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
+    @PutMapping("/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    ResponseEntity<Object> tischAbgerechnet(@PathVariable("tischNr") final int tischNr,
+                                            @PathVariable("anzSitzplaetze") final int anzSitzplaetze) {
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.tischAbgerechnet(tischNr, anzSitzplaetze);
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
     }
 
     /*

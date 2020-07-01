@@ -80,6 +80,7 @@ function TischList() {
         });
     }
 
+    // TODO: handleRemoveSitzplatz
     function handleAddSitzplatz(tischNr) {
         console.log("Add sitzplatz", tischNr);
 
