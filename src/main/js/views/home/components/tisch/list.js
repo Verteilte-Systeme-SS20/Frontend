@@ -49,7 +49,7 @@ function TischList(props) {
             updateUI();
         }).catch(err => {
             setLoading(false);
-            setError(err.response.data);
+            setError(`${err.response.status} - ${err.response.data }`);
             console.error(err);
         });
     }
@@ -69,14 +69,8 @@ function TischList(props) {
         }).catch(err => {
             console.error(err, err.response.data);
             setLoading(false);
-            setError(err.response.data);
+            setError(`${err.response.status} - ${err.response.data }`);
         });
-    }
-
-    function handleAddBestellung(tischNr, sitzplatzNr) {
-        setCurrentTischNr(tischNr);
-        setCurrentSitzplatzNr(sitzplatzNr);
-        setOpenBestellDialog(true);
     }
 
     function handleSubmitBestellung(gericht) {
@@ -89,9 +83,16 @@ function TischList(props) {
         }).catch(err => {
             console.error(err);
             setLoading(false);
-            setError(err.response.data);
+            setError(`${err.response.status} - ${err.response.data }`);
         });
     }
+
+    function handleAddBestellung(tischNr, sitzplatzNr) {
+        setCurrentTischNr(tischNr);
+        setCurrentSitzplatzNr(sitzplatzNr);
+        setOpenBestellDialog(true);
+    }
+
 
     const mapSitzplaetze = (tisch) => {
         const sitzplatzItems = [];
@@ -141,7 +142,7 @@ function TischList(props) {
         return <Grid item key={tisch.nr} xs={4}>
             <Card className={classes.tisch}>
                 <CardHeader
-                    title={'Tisch ' + tisch.nr + ' Sitzplätze: ' + tisch.anzSitzplaetze}
+                    title={'Tisch ' + tisch.nr}
                 />
                 <CardContent>
                     <Grid container spacing={2}>

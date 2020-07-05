@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function ErrorDialog(props) {
-    const { title, description, open, onClose } = props;
+    const { errorTitle, errorDescription, open, onClose } = props;
     const classes = useStyles();
 
     return (
@@ -27,10 +27,12 @@ function ErrorDialog(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title" className={classes.error}>{title}</DialogTitle>
+                <DialogTitle id="alert-dialog-title" className={classes.error}>
+                    Fehler: {errorTitle !== undefined && errorTitle !== null ? errorTitle.toString() : 'Unbekannt'}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {description}
+                        {errorDescription !== undefined && errorDescription !== null ? errorDescription.toString() : ''}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

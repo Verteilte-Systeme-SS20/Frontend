@@ -6,7 +6,6 @@ import TischList from './components/tisch/list';
 import axios from 'axios';
 import { Gericht, Tisch } from '../../models';
 import ErrorDialog from '../components/errorDialog';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -22,6 +21,7 @@ function Home() {
 
     const [loading, setLoading] = useState(true);
     const [dialogError, setDialogError] = useState(null);
+    const [dialogErrorDesc, setDialogErrorDesc] = useState(null);
 
     useEffect(() => {
         fetchDTOs();
@@ -60,7 +60,15 @@ function Home() {
     return <div>
         <ErrorDialog open={dialogError !== null} onClose={() => setDialogError(null)} />
         <Grid className={classes.container} container spacing={2} visibility={loading ? 'hidden' : 'visible'}>
-            <ErrorDialog open={dialogError !== null} onClose={() => setDialogError(null)} />
+            <ErrorDialog
+                errorTitle={dialogError}
+                errorDescription={dialogErrorDesc}
+                open={dialogError !== null}
+                onClose={() => {
+                    setDialogError(null);
+                    setDialogErrorDesc(null);
+                }}
+            />
             <TischForm
                 setLoading={setLoading}
                 updateUI={fetchDTOs}
