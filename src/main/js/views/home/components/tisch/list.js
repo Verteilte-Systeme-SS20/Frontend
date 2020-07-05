@@ -1,10 +1,9 @@
 import Grid from '@material-ui/core/Grid';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
-import { Bestellung, Tisch, Sitzplatz, Gericht } from '../../../../models';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -32,67 +31,44 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function TischList() {
+function TischList(props) {
+    const { tische, gerichte, updateUI, setError, setLoading } = props;
     const classes = useStyles();
-
-    const [tische, setTische] = useState([]);
-    const [gerichte, setGerichte] = useState([]);
-
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     const [currentTischNr, setCurrentTischNr] = useState(0);
     const [currentSitzplatzNr, setCurrentSitzplatzNr] = useState(0);
     const [openBestellDialog, setOpenBestellDialog] = useState(false);
 
-    useEffect(() => {
-        // Fetch tische
-        axios.get('/api/v1/tische').then(res => {
-            console.log("tische", res.data);
-            const parsedTische = res.data.map(d => new Tisch(d.anzSitzplaetze, d.bestellungen ?? [], d.description, d.id, d.nr));
-            setTische(parsedTische);
-            setLoading(false);
-        }).catch(err => {
-            setError(err);
-            setLoading(false);
-            console.error(err);
-        });
-
-        // Fetch gerichte
-        axios.get('/api/v1/gerichte').then(res => {
-            const parsedGerichte = res.data.map(g => new Gericht(g.name, g.preis));
-            setGerichte(parsedGerichte);
-            setLoading(false);
-        }).catch(err => {
-            setError(err);
-            setLoading(false);
-            console.error(err);
-        });
-    }, []);
-
     function handleGetAbrechnung(tischNr, sitzplatzNr) {
+        setLoading(true);
         console.log("Abrechnung", tischNr, sitzplatzNr);
 
         axios.get(`/api/v1/bestellungen/abgrechnet/${tischNr}/${sitzplatzNr}`).then(res => {
             console.log(res);
+            setLoading(false);
+            updateUI();
         }).catch(err => {
+            setLoading(false);
+            setError(err.response.data);
             console.error(err);
         });
     }
 
     // TODO: handleRemoveSitzplatz
     function handleAddSitzplatz(tischNr) {
+        setLoading(true);
         console.log("Add sitzplatz", tischNr);
 
         const tisch = tische.filter(t => t.nr === tischNr)[0];
         const newSitzplaetze = tisch.anzSitzplaetze + 1;
-        console.log("newSitzplaetze", `/api/v1/tische/${tisch.nr}/${newSitzplaetze}`);
 
         axios.put(`/api/v1/tische/${tisch.nr}/${newSitzplaetze}`).then(res => {
             console.log('Neuer tisch', res.data);
-            setError(null);
+            setLoading(false);
+            updateUI();
         }).catch(err => {
             console.error(err, err.response.data);
+            setLoading(false);
             setError(err.response.data);
         });
     }
@@ -104,16 +80,21 @@ function TischList() {
     }
 
     function handleSubmitBestellung(gericht) {
+        setLoading(true);
         console.log("Bestellung", currentTischNr, currentSitzplatzNr, gericht);
         axios.post(`/api/v1/bestellungen/${currentTischNr}/${currentSitzplatzNr}/${gericht.id}`).then(res => {
             console.log(res);
+            setLoading(false);
+            updateUI();
         }).catch(err => {
             console.error(err);
+            setLoading(false);
+            setError(err.response.data);
         });
     }
 
     const cards = tische.map(tisch => {
-        return <Grid item key={tisch.tischNr} xs={4}>
+        return <Grid item key={tisch.nr} xs={4}>
             <Card className={classes.tisch}>
                 <CardHeader
                     title={'Tisch ' + tisch.nr + ' Sitzplätze: ' + tisch.anzSitzplaetze}

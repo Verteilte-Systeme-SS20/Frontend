@@ -37,5 +37,15 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
         public ResponseEntity<Object> updateSeatsOfTable(int tischNr, int anzSitzpleatze) {
             return null;
         }
+
+        @Override
+        public ResponseEntity<Object> tischAbrechnen(int tischNr, int anzSitzplaetze) {
+            return null;
+        }
+
+        @Override
+        public ResponseEntity<Object> tischAbgerechnet(int tischNr, int anzSitzplaetze) {
+            return null;
+        }
     }
 }

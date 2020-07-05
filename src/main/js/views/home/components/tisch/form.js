@@ -24,22 +24,24 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function TischForm() {
+function TischForm(props) {
+    const { setLoading, updateUI } = props;
     const classes = useStyles();
     const { register, handleSubmit, watch, errors } = useForm();
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     function onSubmit(data) {
+        setLoading(true);
         axios.post(`/api/v1/tische/${data.nummer}/${data.positionen}`).then(res => {
             console.log(res);
             setError(null);
+            setLoading(false);
+            updateUI();
         }).catch(err => {
             setError(err.response.data);
+            setLoading(false);
         });
     }
-
-    console.log(error);
 
     return<Grid item xs={2}>
         <Paper className={classes.formPaper}>
@@ -56,7 +58,7 @@ function TischForm() {
                     type="number"
                     inputRef={register({required: true})}
                 />
-                {errors.nummer && <span className={classes.inputError}>Pflichtfeld</span>}
+                {errors.nummer && <Typography variant="p" className={classes.inputError}>Pflichtfeld</Typography>}
                 <TextField
                     className={classes.input}
                     fullWidth
@@ -66,10 +68,10 @@ function TischForm() {
                     type="number"
                     inputRef={register({ required: true, min: 0, max: 50 })}
                 />
-                {errors.positionen && <span className={classes.inputError}>Muss zwischen 0 und 50 sein</span>}
+                {errors.positionen && <Typography variant="p" className={classes.inputError}>Muss zwischen 0 und 50 sein</Typography>}
                 <Divider className={classes.divider} />
                 <Button color="primary" type="submit">Erstellen</Button>
-                <span className={classes.inputError}>{error}</span>
+                <Typography variant="p" className={classes.inputError}>{error}</Typography>
             </form>
         </Paper>
     </Grid>
