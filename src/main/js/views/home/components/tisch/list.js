@@ -93,7 +93,51 @@ function TischList(props) {
         });
     }
 
-    const cards = tische.map(tisch => {
+    const mapSitzplaetze = (tisch) => {
+        const sitzplatzItems = [];
+        for (let sitzplatzNr = 0; sitzplatzNr < tisch.anzSitzplaetze; sitzplatzNr++) {
+            const bestellungen = tisch.bestellungen.filter(b => b.sitzplatzNr === sitzplatzNr);
+            sitzplatzItems.push(
+                <Grid item key={sitzplatzNr} xs={6}>
+                    <Typography variant="subtitle1">Platz {sitzplatzNr}</Typography>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        startIcon={<Send />}
+                        size="small"
+                        onClick={() => handleGetAbrechnung(tisch.nr, sitzplatzNr)}
+                    >
+                        Abrechnung
+                    </Button>
+                    <Divider className={classes.smallDivider}/>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        startIcon={<Add />}
+                        size="small"
+                        onClick={() => handleAddBestellung(tisch.nr, sitzplatzNr)}
+                    >
+                        Bestellung
+                    </Button>
+                    <List dense>
+                        {
+                            bestellungen.map(bestellung => <ListItem key={bestellung.gericht.id}>
+                                <ListItemText
+                                    primary={bestellung.gericht.name}
+                                />
+                            </ListItem>)
+                        }
+                    </List>
+                    <Divider className={classes.divider}/>
+                </Grid>
+            );
+        }
+        return sitzplatzItems;
+    };
+
+    const mapTische = tische.map(tisch => {
         return <Grid item key={tisch.nr} xs={4}>
             <Card className={classes.tisch}>
                 <CardHeader
@@ -112,42 +156,7 @@ function TischList(props) {
                                 Sitzplatz
                             </Button>
                         </Grid>
-                        {
-                            tisch.bestellungen.map(sitzplatz => <Grid item key={sitzplatz.sitzplatzNr} xs={6}>
-                                <Typography variant="subtitle1">Platz {sitzplatz.sitzplatzNr}</Typography>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}
-                                    startIcon={<Send />}
-                                    size="small"
-                                    onClick={() => handleGetAbrechnung(tisch.nr, sitzplatz.sitzplatzNr)}
-                                >
-                                    Abrechnung
-                                </Button>
-                                <Divider className={classes.smallDivider}/>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}
-                                    startIcon={<Add />}
-                                    size="small"
-                                    onClick={() => handleAddBestellung(tisch.nr, sitzplatz.sitzplatzNr)}
-                                >
-                                    Bestellung
-                                </Button>
-                                <List dense>
-                                    {
-                                        sitzplatz.bestellungen.map(bestellung => <ListItem key={bestellung.gericht.id}>
-                                            <ListItemText
-                                                primary={bestellung.gericht.name}
-                                            />
-                                        </ListItem>)
-                                    }
-                                </List>
-                                <Divider className={classes.divider}/>
-                            </Grid>)
-                        }
+                        {mapSitzplaetze(tisch)}
                     </Grid>
                 </CardContent>
             </Card>
@@ -166,7 +175,7 @@ function TischList(props) {
             <Typography variant="h4">Restaurant</Typography>
             <Divider className={classes.divider}/>
             <Grid container spacing={2}>
-                {cards}
+                {mapTische}
             </Grid>
         </Paper>
     </Grid>

@@ -58,7 +58,7 @@ function TischForm(props) {
                     type="number"
                     inputRef={register({required: true})}
                 />
-                {errors.nummer && <Typography variant="p" className={classes.inputError}>Pflichtfeld</Typography>}
+                {errors.nummer && <Typography variant="body2" className={classes.inputError}>Pflichtfeld</Typography>}
                 <TextField
                     className={classes.input}
                     fullWidth
@@ -68,10 +68,10 @@ function TischForm(props) {
                     type="number"
                     inputRef={register({ required: true, min: 0, max: 50 })}
                 />
-                {errors.positionen && <Typography variant="p" className={classes.inputError}>Muss zwischen 0 und 50 sein</Typography>}
+                {errors.positionen && <Typography variant="body2" className={classes.inputError}>Muss zwischen 0 und 50 sein</Typography>}
                 <Divider className={classes.divider} />
                 <Button color="primary" type="submit">Erstellen</Button>
-                <Typography variant="p" className={classes.inputError}>{error}</Typography>
+                <Typography variant="body2" className={classes.inputError}>{error}</Typography>
             </form>
         </Paper>
     </Grid>
