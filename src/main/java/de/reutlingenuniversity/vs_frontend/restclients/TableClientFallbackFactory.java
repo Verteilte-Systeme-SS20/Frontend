@@ -49,6 +49,11 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
         }
 
         @Override
+        public ResponseEntity<Object> addBestellungToTischNrAndSitzplatz(int tischNr, int sitzplatzNr, String name) {
+            return null;
+        }
+
+        @Override
         public ResponseEntity<Object> getAllTablesWithBestellungen() {
             return null;
         }

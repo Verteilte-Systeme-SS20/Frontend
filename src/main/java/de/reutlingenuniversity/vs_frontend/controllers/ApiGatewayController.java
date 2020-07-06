@@ -1,6 +1,5 @@
 package de.reutlingenuniversity.vs_frontend.controllers;
 
-import de.reutlingenuniversity.vs_frontend.models.AbrechnungDTO;
 import de.reutlingenuniversity.vs_frontend.models.GerichtDTO;
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import de.reutlingenuniversity.vs_frontend.restclients.GerichtClient;
@@ -85,6 +84,20 @@ public class ApiGatewayController {
         return response;
     }
 
+    @PostMapping("/bestellungen/{tischNr}/{sitzplatzNr}/{gerichtName}")
+    ResponseEntity<Object> addBestellungToTischNrAndSitzplatz (@PathVariable("tischNr") final int tischNr,
+                                                               @PathVariable("sitzplatzNr") final int sitzplatzNr,
+                                                               @PathVariable("gerichtName") String name){
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.addBestellungToTischNrAndSitzplatz(tischNr, sitzplatzNr, name);
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
+
     @GetMapping("/tische/all")
     ResponseEntity<Object> getAllTablesWithBestellungen(){
         ResponseEntity<Object> response;
@@ -96,15 +109,4 @@ public class ApiGatewayController {
         return response;
     }
 
-    /*
-
-    @PostMapping(value = "/tables")
-    public String createTable() {
-        return null;
-    }
-
-    @DeleteMapping(value = "/tables")
-    public List<TableDTO> removeTable() {
-        return tableClient.getTables();
-    }*/
 }

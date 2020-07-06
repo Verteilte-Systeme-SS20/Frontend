@@ -75,8 +75,8 @@ function TischList(props) {
 
     function handleSubmitBestellung(gericht) {
         setLoading(true);
-        console.log("Bestellung", currentTischNr, currentSitzplatzNr, gericht);
-        axios.post(`/api/v1/bestellungen/${currentTischNr}/${currentSitzplatzNr}/${gericht.id}`).then(res => {
+        console.log("Bestellung", `/api/v1/bestellungen/${currentTischNr}/${currentSitzplatzNr}/${gericht.name}`);
+        axios.post(`/api/v1/bestellungen/${currentTischNr}/${currentSitzplatzNr}/${gericht.name}`).then(res => {
             console.log(res);
             setLoading(false);
             updateUI();
@@ -121,9 +121,9 @@ function TischList(props) {
                 </Button>
                 <List dense>
                     {
-                        s.bestellungen.map(bestellung => <ListItem key={bestellung.gericht.id}>
+                        s.bestellungen.map(bestellung => <ListItem key={bestellung.timeOfBestellung}>
                             <ListItemText
-                                primary={bestellung.gericht.name}
+                                primary={bestellung.gerichtName}
                             />
                         </ListItem>)
                     }

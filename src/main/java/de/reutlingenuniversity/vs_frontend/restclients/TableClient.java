@@ -32,6 +32,11 @@ public interface TableClient {
     ResponseEntity<Object> tischAbgerechnet(@PathVariable("tischNr") final int tischNr,
                                           @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
 
+    @PostMapping("v1/bestellungen/{tischNr}/{sitzplatzNr}/{gerichtName}")
+    ResponseEntity<Object> addBestellungToTischNrAndSitzplatz (@PathVariable("tischNr") final int tischNr,
+                                                               @PathVariable("sitzplatzNr") final int sitzplatzNr,
+                                                               @PathVariable("gerichtName") String name);
+
     @GetMapping("v1/tische/all")
     ResponseEntity<Object> getAllTablesWithBestellungen();
 }
