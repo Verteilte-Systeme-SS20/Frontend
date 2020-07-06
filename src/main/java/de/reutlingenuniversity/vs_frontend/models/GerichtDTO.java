@@ -1,12 +1,21 @@
 package de.reutlingenuniversity.vs_frontend.models;
 
 public class GerichtDTO {
-    String name;
-    double preis;
 
-    public GerichtDTO(String name, double preis) {
-        this.name = name;
-        this.preis = preis;
+    private String name;
+    private double preis;
+
+    public GerichtDTO(String name, double preis){
+        this.setName(name);
+        this.setPreis(preis);
+    }
+
+    @Override
+    public String toString() {
+        return "GerichtDTO{" +
+                "name='" + name + '\'' +
+                ", preis=" + preis +
+                '}';
     }
 
     public String getName() {

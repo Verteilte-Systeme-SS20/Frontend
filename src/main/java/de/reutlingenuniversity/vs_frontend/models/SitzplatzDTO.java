@@ -16,6 +16,15 @@ public class SitzplatzDTO {
         this.setBestellungen(bestellungen);
     }
 
+    @Override
+    public String toString() {
+        return "SitzplatzDTO{" +
+                "tischNr=" + tischNr +
+                ", sitzplatzNr=" + sitzplatzNr +
+                ", bestellungen=" + bestellungen +
+                '}';
+    }
+
     public int getTischNr() {
         return tischNr;
     }

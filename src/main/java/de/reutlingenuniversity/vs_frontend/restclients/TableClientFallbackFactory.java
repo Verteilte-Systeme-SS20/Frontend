@@ -47,5 +47,10 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
         public ResponseEntity<Object> tischAbgerechnet(int tischNr, int anzSitzplaetze) {
             return null;
         }
+
+        @Override
+        public ResponseEntity<Object> getAllTablesWithBestellungen() {
+            return null;
+        }
     }
 }

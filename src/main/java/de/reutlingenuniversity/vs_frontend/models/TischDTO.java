@@ -4,28 +4,28 @@ package de.reutlingenuniversity.vs_frontend.models;
 import java.util.List;
 
 public class TischDTO {
-    private Long id;
     private int nr;
     private String description;
     private int anzSitzplaetze;
-    private List<SitzplatzDTO> bestellungen;
+    private List<SitzplatzDTO> bestellungenToSitzplatz;
 
     public TischDTO(){
     }
-    public TischDTO(Long id, int nr, String description, int anzSitzplaetze, List<SitzplatzDTO> bestellungen){
-        this.setId(id);
+    public TischDTO(int nr, String description, int anzSitzplaetze, List<SitzplatzDTO> bestellungen){
         this.setNr(nr);
         this.setDescription(description);
         this.setAnzSitzplaetze(anzSitzplaetze);
-        this.setBestellungen(bestellungen);
+        this.setBestellungenToSitzplatz(bestellungen);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "TischDTO{" +
+                "nr=" + nr +
+                ", description='" + description + '\'' +
+                ", anzSitzplaetze=" + anzSitzplaetze +
+                ", bestellungenToSitzplatz=" + bestellungenToSitzplatz +
+                '}';
     }
 
     public int getNr() {
@@ -52,11 +52,11 @@ public class TischDTO {
         this.anzSitzplaetze = anzSitzplaetze;
     }
 
-    public List<SitzplatzDTO> getBestellungen() {
-        return bestellungen;
+    public List<SitzplatzDTO> getBestellungenToSitzplatz() {
+        return bestellungenToSitzplatz;
     }
 
-    public void setBestellungen(List<SitzplatzDTO> bestellungen) {
-        this.bestellungen = bestellungen;
+    public void setBestellungenToSitzplatz(List<SitzplatzDTO> bestellungenToSitzplatz) {
+        this.bestellungenToSitzplatz = bestellungenToSitzplatz;
     }
 }

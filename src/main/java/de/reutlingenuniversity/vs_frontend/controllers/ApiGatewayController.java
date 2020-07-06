@@ -85,6 +85,17 @@ public class ApiGatewayController {
         return response;
     }
 
+    @GetMapping("/all")
+    ResponseEntity<Object> getAllTablesWithBestellungen(){
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.getAllTablesWithBestellungen();
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
     /*
 
     @PostMapping(value = "/tables")
