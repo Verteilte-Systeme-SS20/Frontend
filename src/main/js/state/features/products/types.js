@@ -1,3 +1,0 @@
-export const FETCH_PRODUCTS = 'products/FETCH_PRODUCTS';
-export const FETCH_PRODUCTS_COMPLETED = 'products/FETCH_PRODUCTS_COMPLETED';
-export const FETCH_PRODUCTS_FAILED = 'products/FETCH_PRODUCTS_FAILED';

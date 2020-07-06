@@ -1,7 +1,7 @@
 export default class Tisch {
-    constructor(anzSitzplaetze, bestellungen, description, id, nr) {
+    constructor(anzSitzplaetze, sitzplaetze, description, id, nr) {
         this.anzSitzplaetze = anzSitzplaetze;
-        this.bestellungen = bestellungen;
+        this.sitzplaetze = sitzplaetze;
         this.description = description;
         this.id = id;
         this.nr = nr;

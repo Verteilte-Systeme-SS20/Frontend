@@ -31,16 +31,18 @@ function Home() {
         console.log("Fetching DTOs");
         setLoading(true);
         // Fetch tische
-        axios.get('/api/v1/tische').then(res => {
+        axios.get('/api/v1/tische/all').then(res => {
             console.log("tische", res.data);
             const parsedTische = res.data
-                .map(d => new Tisch(d.anzSitzplaetze, d.bestellungen ?? [], d.description, d.id, d.nr));
+                .map(d => new Tisch(d.anzSitzplaetze, d.bestellungenToSitzplatz ?? [], d.description, d.id, d.nr));
             const sortedTische = parsedTische.sort((t1, t2) => t1.nr - t2.nr);
             setTische(sortedTische);
             setLoading(false);
         }).catch(err => {
-            setDialogError(err);
-            setLoading(false);
+            if (err.response.status !== 404) {
+                setDialogError(err);
+                setLoading(false);
+            }
             console.error(err);
         });
 

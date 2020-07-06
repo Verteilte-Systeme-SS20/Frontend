@@ -85,7 +85,7 @@ public class ApiGatewayController {
         return response;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/tische/all")
     ResponseEntity<Object> getAllTablesWithBestellungen(){
         ResponseEntity<Object> response;
         try {

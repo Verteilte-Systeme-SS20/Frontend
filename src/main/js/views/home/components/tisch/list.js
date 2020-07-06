@@ -95,47 +95,42 @@ function TischList(props) {
 
 
     const mapSitzplaetze = (tisch) => {
-        const sitzplatzItems = [];
-        for (let sitzplatzNr = 0; sitzplatzNr < tisch.anzSitzplaetze; sitzplatzNr++) {
-            const bestellungen = tisch.bestellungen.filter(b => b.sitzplatzNr === sitzplatzNr);
-            sitzplatzItems.push(
-                <Grid item key={sitzplatzNr} xs={6}>
-                    <Typography variant="subtitle1">Platz {sitzplatzNr}</Typography>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<Send />}
-                        size="small"
-                        onClick={() => handleGetAbrechnung(tisch.nr, sitzplatzNr)}
-                    >
-                        Abrechnung
-                    </Button>
-                    <Divider className={classes.smallDivider}/>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<Add />}
-                        size="small"
-                        onClick={() => handleAddBestellung(tisch.nr, sitzplatzNr)}
-                    >
-                        Bestellung
-                    </Button>
-                    <List dense>
-                        {
-                            bestellungen.map(bestellung => <ListItem key={bestellung.gericht.id}>
-                                <ListItemText
-                                    primary={bestellung.gericht.name}
-                                />
-                            </ListItem>)
-                        }
-                    </List>
-                    <Divider className={classes.divider}/>
-                </Grid>
-            );
-        }
-        return sitzplatzItems;
+        return tisch.sitzplaetze.map(s => {
+            return  <Grid item key={s.sitzplatzNr} xs={6}>
+                <Typography variant="subtitle1">Platz {s.sitzplatzNr}</Typography>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Send />}
+                    size="small"
+                    onClick={() => handleGetAbrechnung(s.tischNr, s.sitzplatzNr)}
+                >
+                    Abrechnung
+                </Button>
+                <Divider className={classes.smallDivider}/>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<Add />}
+                    size="small"
+                    onClick={() => handleAddBestellung(s.tischNr, s.sitzplatzNr)}
+                >
+                    Bestellung
+                </Button>
+                <List dense>
+                    {
+                        s.bestellungen.map(bestellung => <ListItem key={bestellung.gericht.id}>
+                            <ListItemText
+                                primary={bestellung.gericht.name}
+                            />
+                        </ListItem>)
+                    }
+                </List>
+                <Divider className={classes.divider}/>
+            </Grid>;
+        });
     };
 
     const mapTische = tische.map(tisch => {
