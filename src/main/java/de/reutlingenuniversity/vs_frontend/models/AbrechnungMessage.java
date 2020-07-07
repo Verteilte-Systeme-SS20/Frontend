@@ -10,4 +10,37 @@ public class AbrechnungMessage {
         this.error = error;
         this.abrechnungDTO = abrechnungDTO;
     }
+
+    @Override
+    public String toString() {
+        return "AbrechnungMessage{" +
+                "successful=" + successful +
+                ", error='" + error + '\'' +
+                ", abrechnungDTO=" + abrechnungDTO +
+                '}';
+    }
+
+    public boolean isSuccessful() {
+        return successful;
+    }
+
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public AbrechnungDTO getAbrechnungDTO() {
+        return abrechnungDTO;
+    }
+
+    public void setAbrechnungDTO(AbrechnungDTO abrechnungDTO) {
+        this.abrechnungDTO = abrechnungDTO;
+    }
 }
