@@ -44,7 +44,7 @@ function TischList(props) {
         setLoading(true);
         console.log("Abrechnung", tischNr, sitzplatzNr);
 
-        axios.get(`/api/v1/bestellungen/abgrechnet/${tischNr}/${sitzplatzNr}`).then(res => {
+        axios.get(`/api/v1/bestellungen/abrechnung/${tischNr}/${sitzplatzNr}`).then(res => {
             console.log(res);
             setLoading(false);
             updateUI();

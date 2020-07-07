@@ -75,7 +75,7 @@ public class ApiGatewayController {
         return response;
     }
 
-    @PutMapping("/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    @PutMapping("/tische/abrechnung/{tischNr}/{sitzplatz}")
     ResponseEntity<Object> tischAbgerechnet(@PathVariable("tischNr") final int tischNr,
                                             @PathVariable("anzSitzplaetze") final int anzSitzplaetze) {
         ResponseEntity<Object> response;
@@ -124,11 +124,32 @@ public class ApiGatewayController {
         return response;
     }
 
+    @GetMapping("/bestellungen/abrechnung/{tischNr}/{sitzplatzNr}")
+    ResponseEntity<Object> getBestellungenByTischNrSitzplatzNr(@PathVariable("tischNr") final int tischNr,
+                                                            @PathVariable("sitzplatzNr") final int sitzplatz) {
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.getBestellungenByTischNrSitzplatzNr(tischNr, sitzplatz);
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
     // Abrechnungen
     @PostMapping("/abrechnungen/completed")
     ResponseEntity<Object> sendAbrechnung(AbrechnungDTO abrechnungDTO) {
-        // TODO: message tisch service
+        // Message tisch service
+        ResponseEntity<Object> tableResponse;
+        try {
+            tableResponse = tableClient.setBestellungToAbgerechnet(abrechnungDTO.getTischNr(), abrechnungDTO.getSitzplatzNr());
+        } catch (FeignException e) {
+            tableResponse = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        System.out.println("tableresponse: " + tableResponse.getStatusCode());
         // TODO: message frontend
+
+        // Respond to Abrechnung
         ResponseEntity<Object> response = new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         System.out.println("Got abrechnung:" + abrechnungDTO.toString());
         return response;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name="tisch", url = "http://localhost:8001", fallbackFactory = TableClientFallbackFactory.class)
+@FeignClient(name="tisch", url = "http://tisch:8888", fallbackFactory = TableClientFallbackFactory.class)
 public interface TableClient {
     String prefixTische = "/v1/tische";
     String prefixBestellungen = "/v1/bestellungen";
@@ -45,4 +45,12 @@ public interface TableClient {
     ResponseEntity<Object> addBestellungToTischNrAndSitzplatz (@PathVariable("tischNr") final int tischNr,
                                                                @PathVariable("sitzplatzNr") final int sitzplatzNr,
                                                                @PathVariable("gerichtName") String name);
+
+    @PutMapping(prefixBestellungen + "/abrechnung/{tischNr}/{sitzplatzNr}")
+    ResponseEntity<Object> setBestellungToAbgerechnet(@PathVariable("tischNr") final int tischNr,
+                                                      @PathVariable("sitzplatzNr") final int sitzplatzNr);
+
+    @GetMapping(prefixBestellungen + "/abrechnung/{tischNr}/{sitzplatzNr}")
+    ResponseEntity<Object> getBestellungenByTischNrSitzplatzNr(@PathVariable("tischNr") final int tischNr,
+                                                            @PathVariable("sitzplatzNr") final int sitzplatz);
 }

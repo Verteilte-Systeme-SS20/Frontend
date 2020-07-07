@@ -54,6 +54,16 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
         }
 
         @Override
+        public ResponseEntity<Object> setBestellungToAbgerechnet(int tischNr, int sitzplatzNr) {
+            return null;
+        }
+
+        @Override
+        public ResponseEntity<Object> getBestellungenByTischNrSitzplatzNr(int tischNr, int sitzplatz) {
+            return null;
+        }
+
+        @Override
         public ResponseEntity<Object> deleteTable(int tischNr) {
             return null;
         }
