@@ -111,11 +111,13 @@ function TischList(props) {
 
     const mapSitzplaetze = (tisch) => {
         return tisch.sitzplaetze.map(s => {
+            const offeneBestellungen = s.bestellungen
+                .filter(b => !b.abgerechnet);
             return  <Grid item key={s.sitzplatzNr} xs={6}>
                 <Typography variant="subtitle1">Platz {s.sitzplatzNr}</Typography>
                 <Button
                     variant="contained"
-                    disabled={!s.abrechnungProcessing && s.bestellungen.length <= 0}
+                    disabled={s.abrechnungProcessing || offeneBestellungen.length <= 0}
                     color="secondary"
                     className={classes.button}
                     startIcon={<Send />}
@@ -140,8 +142,7 @@ function TischList(props) {
                 </Button>
                 <List dense>
                     {
-                        s.bestellungen
-                            .filter(b => !b.abgerechnet)
+                        offeneBestellungen
                             .map(bestellung => <ListItem key={bestellung.timestamp}>
                                 <ListItemText
                                     primary={bestellung.gericht.name}
