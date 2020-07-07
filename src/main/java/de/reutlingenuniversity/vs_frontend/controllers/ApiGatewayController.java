@@ -138,7 +138,7 @@ public class ApiGatewayController {
 
     // Abrechnungen
     @PostMapping("/abrechnungen/completed")
-    ResponseEntity<Object> sendAbrechnung(AbrechnungDTO abrechnungDTO) {
+    ResponseEntity<Object> sendAbrechnung(@RequestBody AbrechnungDTO abrechnungDTO) {
         // Message tisch service
         ResponseEntity<Object> tableResponse;
         try {

@@ -5,11 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-public class AbrechnungDTO implements Serializable {
+public class AbrechnungDTO {
     private int tischNr;
     private int sitzplatzNr;
     private int abrechnungsNr;
