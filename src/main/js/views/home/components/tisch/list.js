@@ -8,12 +8,13 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
-import { Add, Send } from '@material-ui/icons';
+import { Add, Send, Delete } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import BestellDialog from '../bestellung/bestellDialog';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
     listPaper: {
@@ -86,6 +87,20 @@ function TischList(props) {
             setError(`${err.response.status} - ${err.response.data }`);
         });
     }
+    
+    function handleDeleteTable(tischNr) {
+        setLoading(true);
+        console.log("Delete Tisch", tischNr);
+        axios.delete(`/api/v1/tische/${tischNr}`).then(res => {
+            console.log(res);
+            setLoading(false);
+            updateUI();
+        }).catch(err => {
+            console.error(err);
+            setLoading(false);
+            setError(`${err.response.status} - ${err.response.data }`);
+        });
+    }
 
     function handleAddBestellung(tischNr, sitzplatzNr) {
         setCurrentTischNr(tischNr);
@@ -138,6 +153,14 @@ function TischList(props) {
             <Card className={classes.tisch}>
                 <CardHeader
                     title={'Tisch ' + tisch.nr}
+                    action={
+                        <IconButton 
+                            aria-label="Tisch löschen"
+                            onClick={() => handleDeleteTable(tisch.nr)}
+                        >
+                            <Delete />
+                        </IconButton>
+                    }
                 />
                 <CardContent>
                     <Grid container spacing={2}>

@@ -65,7 +65,7 @@ function Home() {
             <ErrorDialog
                 errorTitle={dialogError}
                 errorDescription={dialogErrorDesc}
-                open={dialogError !== null}
+                open={dialogError !== undefined && dialogError !== null}
                 onClose={() => {
                     setDialogError(null);
                     setDialogErrorDesc(null);
