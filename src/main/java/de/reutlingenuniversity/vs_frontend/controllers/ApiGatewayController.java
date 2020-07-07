@@ -1,6 +1,9 @@
 package de.reutlingenuniversity.vs_frontend.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.reutlingenuniversity.vs_frontend.models.AbrechnungDTO;
+import de.reutlingenuniversity.vs_frontend.models.AbrechnungMessage;
 import de.reutlingenuniversity.vs_frontend.models.GerichtDTO;
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import de.reutlingenuniversity.vs_frontend.restclients.GerichtClient;
@@ -9,6 +12,7 @@ import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +23,12 @@ import java.util.List;
 public class ApiGatewayController {
     private final TableClient tableClient;
     private final GerichtClient gerichtClient;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public ApiGatewayController(TableClient tableClient, GerichtClient gerichtClient) {
+    public ApiGatewayController(TableClient tableClient, GerichtClient gerichtClient, SimpMessagingTemplate simpMessagingTemplate) {
         this.tableClient = tableClient;
         this.gerichtClient = gerichtClient;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     // Tische
@@ -148,6 +154,15 @@ public class ApiGatewayController {
         }
         System.out.println("tableresponse: " + tableResponse.getStatusCode());
         // TODO: message frontend
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            AbrechnungMessage abrechnungMessage = new AbrechnungMessage(true, null, abrechnungDTO);
+            String abrechnungsMessageSerialized = objectMapper.writeValueAsString(abrechnungMessage);
+            System.out.println("Sending message: " + abrechnungsMessageSerialized);
+            this.simpMessagingTemplate.convertAndSend("/topic/abrechnung", abrechnungsMessageSerialized);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         // Respond to Abrechnung
         ResponseEntity<Object> response = new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

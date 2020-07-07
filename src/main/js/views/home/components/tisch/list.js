@@ -15,6 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import BestellDialog from '../bestellung/bestellDialog';
 import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles(theme => ({
     listPaper: {
@@ -87,7 +88,7 @@ function TischList(props) {
             setError(`${err.response.status} - ${err.response.data }`);
         });
     }
-    
+
     function handleDeleteTable(tischNr) {
         setLoading(true);
         console.log("Delete Tisch", tischNr);
@@ -108,13 +109,13 @@ function TischList(props) {
         setOpenBestellDialog(true);
     }
 
-
     const mapSitzplaetze = (tisch) => {
         return tisch.sitzplaetze.map(s => {
             return  <Grid item key={s.sitzplatzNr} xs={6}>
                 <Typography variant="subtitle1">Platz {s.sitzplatzNr}</Typography>
                 <Button
                     variant="contained"
+                    disabled={!s.abrechnungProcessing && s.bestellungen.length <= 0}
                     color="secondary"
                     className={classes.button}
                     startIcon={<Send />}
@@ -123,6 +124,9 @@ function TischList(props) {
                 >
                     Abrechnung
                 </Button>
+                {
+                    s.abrechnungProcessing ? <CircularProgress  /> : null
+                }
                 <Divider className={classes.smallDivider}/>
                 <Button
                     variant="contained"
@@ -136,11 +140,14 @@ function TischList(props) {
                 </Button>
                 <List dense>
                     {
-                        s.bestellungen.map(bestellung => <ListItem key={bestellung.timeOfBestellung}>
-                            <ListItemText
-                                primary={bestellung.gerichtName}
-                            />
-                        </ListItem>)
+                        s.bestellungen
+                            .filter(b => !b.abgerechnet)
+                            .map(bestellung => <ListItem key={bestellung.timestamp}>
+                                <ListItemText
+                                    primary={bestellung.gericht.name}
+                                    secondary={bestellung.gericht.preis}
+                                />
+                            </ListItem>)
                     }
                 </List>
                 <Divider className={classes.divider}/>
@@ -154,7 +161,7 @@ function TischList(props) {
                 <CardHeader
                     title={'Tisch ' + tisch.nr}
                     action={
-                        <IconButton 
+                        <IconButton
                             aria-label="Tisch löschen"
                             onClick={() => handleDeleteTable(tisch.nr)}
                         >

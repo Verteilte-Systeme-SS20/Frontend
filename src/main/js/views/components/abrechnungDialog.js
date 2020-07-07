@@ -7,19 +7,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
-    error: {
-        color: theme.palette.error
-    }
+
 }));
 
 
-function ErrorDialog(props) {
-    const { errorTitle, errorDescription, open, onClose } = props;
+function AbrechnungDialog(props) {
+    const { abrechnung, open, onClose } = props;
     const classes = useStyles();
 
-    if (errorTitle === null || errorTitle === undefined) {
+    if (abrechnung === null  || abrechnung === undefined) {
         return null;
     }
 
@@ -32,11 +31,12 @@ function ErrorDialog(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title" className={classes.error}>
-                    Fehler: {errorTitle !== undefined && errorTitle !== null ? errorTitle.toString() : 'Unbekannt'}
+                    Abrechnung Nr. {abrechnung.nr}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {errorDescription !== undefined && errorDescription !== null ? errorDescription.toString() : ''}
+                        {abrechnung.positionen.map(p => <Typography>{p}</Typography>)}
+                        <Typography variant="body1">{abrechnung.sum}</Typography>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -49,4 +49,4 @@ function ErrorDialog(props) {
     );
 }
 
-export default ErrorDialog;
+export default AbrechnungDialog;

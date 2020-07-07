@@ -6,6 +6,9 @@ import TischList from './components/tisch/list';
 import axios from 'axios';
 import { Gericht, Tisch } from '../../models';
 import ErrorDialog from '../components/errorDialog';
+import SockJsClient from 'react-stomp';
+import AbrechnungsMessage from '../../models/abrechnungsMessage';
+import AbrechnungDialog from '../components/abrechnungDialog';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -18,10 +21,14 @@ function Home() {
     const classes = useStyles();
     const [tische, setTische] = useState([]);
     const [gerichte, setGerichte] = useState([]);
+    const [client, setClient] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [dialogError, setDialogError] = useState(null);
     const [dialogErrorDesc, setDialogErrorDesc] = useState(null);
+
+    const [currentAbrechnung, setCurrentAbrechnung] = useState(null);
+    const [dialogAbrechnungOpen, setDialogAbrechnungOpen] = useState(false);
 
     useEffect(() => {
         fetchDTOs();
@@ -59,8 +66,39 @@ function Home() {
         });
     }
 
+    function onSockJsMessage(msg, topic) {
+        console.log("Got msg", msg, topic);
+        const abrechnungsMessage = new AbrechnungsMessage(msg.successful, msg.error, msg.abrechnung);
+        if (!abrechnungsMessage.successful) {
+            setDialogError("Fehler bei Abrechnungsprozess");
+            setDialogErrorDesc(abrechnungsMessage.error)
+        } else {
+            setCurrentAbrechnung(abrechnungsMessage.abrechnung);
+            setDialogAbrechnungOpen(true);
+        }
+    }
+
+    function onSockJsConnect(status) {
+        console.log("connected", status);
+    }
+
     return <div>
+        <SockJsClient
+            url={`${window.location.protocol}//${window.location.host}/handler`}
+            topics={["/topic/abrechnung"]}
+            onConnect={onSockJsConnect}
+            onMessage={onSockJsMessage}
+            ref={ (client) => { setClient(client) }}
+        />
         <ErrorDialog open={dialogError !== null} onClose={() => setDialogError(null)} />
+        <AbrechnungDialog
+            open={dialogAbrechnungOpen}
+            onClose={() => {
+                setDialogAbrechnungOpen(false);
+                setCurrentAbrechnung(null);
+                fetchDTOs();
+            }}
+            abrechnung={currentAbrechnung} />
         <Grid className={classes.container} container spacing={2} visibility={loading ? 'hidden' : 'visible'}>
             <ErrorDialog
                 errorTitle={dialogError}
