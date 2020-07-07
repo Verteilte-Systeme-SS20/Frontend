@@ -54,6 +54,11 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
         }
 
         @Override
+        public ResponseEntity<Object> deleteTable(int tischNr) {
+            return null;
+        }
+
+        @Override
         public ResponseEntity<Object> getAllTablesWithBestellungen() {
             return null;
         }

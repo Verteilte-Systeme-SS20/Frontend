@@ -3,40 +3,46 @@ package de.reutlingenuniversity.vs_frontend.restclients;
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @FeignClient(name="tisch", url = "http://localhost:8001", fallbackFactory = TableClientFallbackFactory.class)
 public interface TableClient {
+    String prefixTische = "/v1/tische";
+    String prefixBestellungen = "/v1/bestellungen";
 
-    @GetMapping("/v1/tische/")
+    // Tische
+
+    @GetMapping(prefixTische + "/")
     List<TischDTO> getTables();
 
-    @PostMapping("/v1/tische/{tischNr}/{anzSitzplaetze}")
+    @PostMapping(prefixTische + "/{tischNr}/{anzSitzplaetze}")
     ResponseEntity<Object> createTable(@PathVariable("tischNr") final int tischNr,
                                        @PathVariable("anzSitzplaetze") final int sitzplaetze);
 
-    @PutMapping("v1/tische/{tischNr}/{anzSitzplaetze}")
+    @PutMapping(prefixTische + "/{tischNr}/{anzSitzplaetze}")
     ResponseEntity<Object> updateSeatsOfTable(@PathVariable("tischNr") final int tischNr,
                                               @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
 
-    @PostMapping("v1/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    @PostMapping(prefixTische + "/abrechnung/{tischNr}/{anzSitzplaetze}")
     ResponseEntity<Object> tischAbrechnen(@PathVariable("tischNr") final int tischNr,
                                               @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
 
-    @PutMapping("v1/tische/abrechnung/{tischNr}/{anzSitzplaetze}")
+    @PutMapping(prefixTische + "/abrechnung/{tischNr}/{anzSitzplaetze}")
     ResponseEntity<Object> tischAbgerechnet(@PathVariable("tischNr") final int tischNr,
                                           @PathVariable("anzSitzplaetze") final int anzSitzplaetze);
 
-    @PostMapping("v1/bestellungen/{tischNr}/{sitzplatzNr}/{gerichtName}")
+    @GetMapping(prefixTische + "/all")
+    ResponseEntity<Object> getAllTablesWithBestellungen();
+
+    @DeleteMapping(prefixTische + "/{tischNr}")
+    ResponseEntity<Object> deleteTable(@PathVariable("tischNr") final int tischNr);
+
+    // Bestellungen
+
+    @PostMapping(prefixBestellungen + "/{tischNr}/{sitzplatzNr}/{gerichtName}")
     ResponseEntity<Object> addBestellungToTischNrAndSitzplatz (@PathVariable("tischNr") final int tischNr,
                                                                @PathVariable("sitzplatzNr") final int sitzplatzNr,
                                                                @PathVariable("gerichtName") String name);
-
-    @GetMapping("v1/tische/all")
-    ResponseEntity<Object> getAllTablesWithBestellungen();
 }

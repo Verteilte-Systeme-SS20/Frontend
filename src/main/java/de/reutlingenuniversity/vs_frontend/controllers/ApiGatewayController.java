@@ -24,6 +24,8 @@ public class ApiGatewayController {
         this.gerichtClient = gerichtClient;
     }
 
+    // Tische
+
     @GetMapping(value = "/tische", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TischDTO> getTables() {
@@ -84,6 +86,30 @@ public class ApiGatewayController {
         return response;
     }
 
+    @GetMapping("/tische/all")
+    ResponseEntity<Object> getAllTablesWithBestellungen(){
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.getAllTablesWithBestellungen();
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
+    @DeleteMapping("/tische/{tischNr}")
+    ResponseEntity<Object> deleteTable(@PathVariable("tischNr") final int tischNr){
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.deleteTable(tischNr);
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
+    // Bestellungen
+
     @PostMapping("/bestellungen/{tischNr}/{sitzplatzNr}/{gerichtName}")
     ResponseEntity<Object> addBestellungToTischNrAndSitzplatz (@PathVariable("tischNr") final int tischNr,
                                                                @PathVariable("sitzplatzNr") final int sitzplatzNr,
@@ -91,18 +117,6 @@ public class ApiGatewayController {
         ResponseEntity<Object> response;
         try {
             response = tableClient.addBestellungToTischNrAndSitzplatz(tischNr, sitzplatzNr, name);
-        } catch (FeignException e) {
-            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
-        }
-        return response;
-    }
-
-
-    @GetMapping("/tische/all")
-    ResponseEntity<Object> getAllTablesWithBestellungen(){
-        ResponseEntity<Object> response;
-        try {
-            response = tableClient.getAllTablesWithBestellungen();
         } catch (FeignException e) {
             response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
         }
