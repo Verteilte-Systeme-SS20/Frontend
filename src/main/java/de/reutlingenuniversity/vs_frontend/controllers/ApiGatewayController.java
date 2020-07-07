@@ -1,5 +1,6 @@
 package de.reutlingenuniversity.vs_frontend.controllers;
 
+import de.reutlingenuniversity.vs_frontend.models.AbrechnungDTO;
 import de.reutlingenuniversity.vs_frontend.models.GerichtDTO;
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import de.reutlingenuniversity.vs_frontend.restclients.GerichtClient;
@@ -120,6 +121,16 @@ public class ApiGatewayController {
         } catch (FeignException e) {
             response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
         }
+        return response;
+    }
+
+    // Abrechnungen
+    @PostMapping("/abrechnungen/completed")
+    ResponseEntity<Object> sendAbrechnung(AbrechnungDTO abrechnungDTO) {
+        // TODO: message tisch service
+        // TODO: message frontend
+        ResponseEntity<Object> response = new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        System.out.println("Got abrechnung:" + abrechnungDTO.toString());
         return response;
     }
 
