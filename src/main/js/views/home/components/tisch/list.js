@@ -16,6 +16,7 @@ import List from '@material-ui/core/List';
 import BestellDialog from '../bestellung/bestellDialog';
 import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const useStyles = makeStyles(theme => ({
     listPaper: {
@@ -103,6 +104,20 @@ function TischList(props) {
         });
     }
 
+    function handleDeleteBestellung(abrNr) {
+        setLoading(true);
+        console.log("Delete Abrechnung", abrNr);
+        axios.delete(`/api/v1/bestellungen/${abrNr}`).then(res => {
+            console.log(res);
+            setLoading(false);
+            updateUI();
+        }).catch(err => {
+            console.error(err);
+            setLoading(false);
+            setError(`${err.response.status} - ${err.response.data }`);
+        });
+    }
+
     function handleAddBestellung(tischNr, sitzplatzNr) {
         setCurrentTischNr(tischNr);
         setCurrentSitzplatzNr(sitzplatzNr);
@@ -148,6 +163,11 @@ function TischList(props) {
                                     primary={bestellung.gericht.name}
                                     secondary={bestellung.gericht.preis}
                                 />
+                                <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteBestellung(bestellung.nr)}>
+                                        <Delete />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
                             </ListItem>)
                     }
                 </List>

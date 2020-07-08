@@ -142,6 +142,17 @@ public class ApiGatewayController {
         return response;
     }
 
+    @DeleteMapping("/bestellungen/{bestellNr}")
+    ResponseEntity<Object> deleteBestellungByBestellNr (@PathVariable("bestellNr") final int bestellNr){
+        ResponseEntity<Object> response;
+        try {
+            response = tableClient.deleteBestellungByBestellNr(bestellNr);
+        } catch (FeignException e) {
+            response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
+        }
+        return response;
+    }
+
     // Abrechnungen
     @PostMapping("/abrechnungen/completed")
     ResponseEntity<Object> sendAbrechnung(@RequestBody AbrechnungDTO abrechnungDTO) {

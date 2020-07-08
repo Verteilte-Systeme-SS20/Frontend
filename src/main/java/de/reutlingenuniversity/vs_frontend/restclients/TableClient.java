@@ -2,6 +2,7 @@ package de.reutlingenuniversity.vs_frontend.restclients;
 
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,9 @@ public interface TableClient {
     @PutMapping(prefixBestellungen + "/abrechnung/{tischNr}/{sitzplatzNr}")
     ResponseEntity<Object> setBestellungToAbgerechnet(@PathVariable("tischNr") final int tischNr,
                                                       @PathVariable("sitzplatzNr") final int sitzplatzNr);
+
+    @DeleteMapping(prefixBestellungen + "/{bestellNr}")
+    ResponseEntity<Object> deleteBestellungByBestellNr (@PathVariable("bestellNr") final int bestellNr);
 
     @GetMapping(prefixBestellungen + "/abrechnung/{tischNr}/{sitzplatzNr}")
     ResponseEntity<Object> getBestellungenByTischNrSitzplatzNr(@PathVariable("tischNr") final int tischNr,
