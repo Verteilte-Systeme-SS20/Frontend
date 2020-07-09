@@ -41,6 +41,17 @@ function TischList(props) {
     const [currentTischNr, setCurrentTischNr] = useState(0);
     const [currentSitzplatzNr, setCurrentSitzplatzNr] = useState(0);
     const [openBestellDialog, setOpenBestellDialog] = useState(false);
+    
+    function formatPrice(price) {
+        let result = '';
+        // If number is not float, add ".0"
+        if (price % 1 === 0) {
+            result = `${price}.0`;
+        } else {
+            result = price;
+        }
+        return `${result} €`
+    }
 
     function handleGetAbrechnung(tischNr, sitzplatzNr) {
         setLoading(true);
@@ -161,7 +172,7 @@ function TischList(props) {
                             .map(bestellung => <ListItem key={bestellung.timestamp}>
                                 <ListItemText
                                     primary={bestellung.gericht.name}
-                                    secondary={bestellung.gericht.preis}
+                                    secondary={formatPrice(bestellung.gericht.preis)}
                                 />
                                 <ListItemSecondaryAction>
                                     <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteBestellung(bestellung.nr)}>

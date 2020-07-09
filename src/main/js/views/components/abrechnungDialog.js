@@ -22,6 +22,17 @@ function AbrechnungDialog(props) {
         return null;
     }
 
+    function formatPrice(price) {
+        let result;
+        // If number is not float, add ".0"
+        if (price % 1 === 0) {
+            result = `${price}.0`;
+        } else {
+            result = price;
+        }
+        return `${result} €`
+    }
+
     return (
         <div>
             <Dialog
@@ -36,7 +47,7 @@ function AbrechnungDialog(props) {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {abrechnung.positionen.map(p => <Typography>{p}</Typography>)}
-                        <Typography variant="body1">{abrechnung.sum}</Typography>
+                        <Typography variant="body1">Summe: {formatPrice(abrechnung.sum)}</Typography>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
