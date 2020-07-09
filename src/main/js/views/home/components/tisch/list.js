@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function TischList(props) {
-    const { tische, gerichte, updateUI, setError, setLoading } = props;
+    const { tische, gerichte, updateUI, handleAbrechnungProcessing, setError, setLoading } = props;
     const classes = useStyles();
 
     const [currentTischNr, setCurrentTischNr] = useState(0);
@@ -60,7 +60,7 @@ function TischList(props) {
         axios.get(`/api/v1/bestellungen/abrechnung/${tischNr}/${sitzplatzNr}`).then(res => {
             console.log(res);
             setLoading(false);
-            updateUI();
+            handleAbrechnungProcessing(tischNr, sitzplatzNr);
         }).catch(err => {
             setLoading(false);
             setError(`${err.response.status} - ${err.response.data }`);
@@ -152,9 +152,6 @@ function TischList(props) {
                 >
                     Abrechnung
                 </Button>
-                {
-                    s.abrechnungProcessing ? <CircularProgress  /> : null
-                }
                 <Divider className={classes.smallDivider}/>
                 <Button
                     variant="contained"

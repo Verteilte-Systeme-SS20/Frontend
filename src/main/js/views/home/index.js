@@ -68,6 +68,14 @@ function Home() {
         });
     }
 
+    function handleAbrechnungProcessing(tischNr, sitzplatzNr) {
+        const newTische = [...tische];
+        const tischWithSitzplatz = newTische.filter(t => t.nr === tischNr)[0];
+        const sitzplatzToSetProcessing = tischWithSitzplatz.sitzplaetze.filter(s => s.sitzplatzNr === sitzplatzNr)[0];
+        sitzplatzToSetProcessing.abrechnungProcessing = true;
+        setTische(newTische);
+    }
+
     function onSockJsMessage(msg, topic) {
         console.log("Got msg", msg, topic);
         const abrechnungsMessage = new AbrechnungsMessage(msg.successful, msg.error, msg.abrechnungDTO);
@@ -78,10 +86,11 @@ function Home() {
             setCurrentAbrechnung(abrechnungsMessage.abrechnung);
             setDialogAbrechnungOpen(true);
         }
+        fetchDTOs();
     }
 
-    function onSockJsConnect(status) {
-        console.log("connected", status);
+    function onSockJsConnect() {
+        console.log("WebSocket connected");
     }
 
     return <div>
@@ -121,6 +130,7 @@ function Home() {
                 setError={setDialogError}
                 setLoading={setLoading}
                 updateUI={fetchDTOs}
+                handleAbrechnungProcessing={handleAbrechnungProcessing}
             />
         </Grid>
     </div>;
