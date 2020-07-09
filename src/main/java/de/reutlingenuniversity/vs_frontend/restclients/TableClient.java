@@ -2,13 +2,12 @@ package de.reutlingenuniversity.vs_frontend.restclients;
 
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name="tisch", url = "http://tisch:8888", fallbackFactory = TableClientFallbackFactory.class)
+@FeignClient(name="tisch", fallbackFactory = TableClientFallbackFactory.class)
 public interface TableClient {
     String prefixTische = "/v1/tische";
     String prefixBestellungen = "/v1/bestellungen";
