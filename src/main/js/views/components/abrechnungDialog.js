@@ -45,10 +45,12 @@ function AbrechnungDialog(props) {
                     Abrechnung Nr. {abrechnung.nr}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        {abrechnung.positionen.map(p => <Typography>{p}</Typography>)}
-                        <Typography variant="body1">Summe: {formatPrice(abrechnung.sum)}</Typography>
-                    </DialogContentText>
+                    {
+                        abrechnung.positionen.map(p =>
+                            <Typography key={abrechnung.positionen.indexOf(p)}>{p}</Typography>
+                        )
+                    }
+                    <Typography variant="body1">Summe: {formatPrice(abrechnung.sum)}</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="primary" autoFocus>

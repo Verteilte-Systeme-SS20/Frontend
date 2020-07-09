@@ -32,7 +32,7 @@ function ErrorDialog(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title" className={classes.error}>
-                    Fehler: {errorTitle !== undefined && errorTitle !== null ? errorTitle.toString() : 'Unbekannt'}
+                    Fehler: {typeof errorTitle === 'object' ? 'Unbekannt' : errorTitle.toString()}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
