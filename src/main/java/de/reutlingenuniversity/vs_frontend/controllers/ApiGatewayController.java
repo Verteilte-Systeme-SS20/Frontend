@@ -164,7 +164,6 @@ public class ApiGatewayController {
             tableResponse = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
         }
         System.out.println("tableresponse: " + tableResponse.getStatusCode());
-        // TODO: message frontend
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             AbrechnungMessage abrechnungMessage = new AbrechnungMessage(true, null, abrechnungDTO);
