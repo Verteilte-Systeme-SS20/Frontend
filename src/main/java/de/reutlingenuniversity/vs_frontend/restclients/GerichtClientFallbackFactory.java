@@ -4,6 +4,7 @@ import de.reutlingenuniversity.vs_frontend.models.GerichtDTO;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,7 +25,7 @@ public class GerichtClientFallbackFactory implements FallbackFactory<GerichtClie
 
         @Override
         public List<GerichtDTO> getAll() {
-            return null;
+            return new ArrayList<>();
         }
     }
 }

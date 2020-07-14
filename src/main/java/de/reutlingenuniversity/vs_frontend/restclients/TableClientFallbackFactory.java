@@ -2,9 +2,11 @@ package de.reutlingenuniversity.vs_frontend.restclients;
 
 import de.reutlingenuniversity.vs_frontend.models.TischDTO;
 import feign.hystrix.FallbackFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,7 +27,7 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
 
         @Override
         public List<TischDTO> getTables() {
-            return null;
+            return new ArrayList<>();
         }
 
         @Override
@@ -75,7 +77,7 @@ public class TableClientFallbackFactory implements FallbackFactory<TableClient> 
 
         @Override
         public ResponseEntity<Object> getAllTablesWithBestellungen() {
-            return null;
+            return new ResponseEntity<>("Tisch-Dienst ist aktuell noch nicht verfügbar", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 }
