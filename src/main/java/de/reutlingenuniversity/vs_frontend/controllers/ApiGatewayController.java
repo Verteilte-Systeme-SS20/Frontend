@@ -154,9 +154,10 @@ public class ApiGatewayController {
     }
 
     // Abrechnungen
-    @PostMapping("/abrechnungen/completed")
-    ResponseEntity<Object> sendAbrechnung(@RequestBody AbrechnungDTO abrechnungDTO) {
+    @PostMapping("/abrechnungen/completed/forward")
+    ResponseEntity<Object> sendAbrechnungForward(@RequestBody AbrechnungDTO abrechnungDTO) {
         // Message tisch service
+        System.out.println("Got abrechnung and forwarding:" + abrechnungDTO.toString());
         ResponseEntity<Object> tableResponse;
         try {
             tableResponse = tableClient.setBestellungToAbgerechnet(abrechnungDTO.getTischNr(), abrechnungDTO.getSitzplatzNr());
@@ -164,6 +165,14 @@ public class ApiGatewayController {
             tableResponse = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
         }
         System.out.println("tableresponse: " + tableResponse.getStatusCode());
+        // Respond to Abrechnung
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/abrechnungen/completed/notification")
+    ResponseEntity<Object> sendAbrechnungNotification(@RequestBody AbrechnungDTO abrechnungDTO) {
+        // Message frontend
+        System.out.println("Got abrechnung and messaging frontend:" + abrechnungDTO.toString());
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             AbrechnungMessage abrechnungMessage = new AbrechnungMessage(true, null, abrechnungDTO);
@@ -175,9 +184,7 @@ public class ApiGatewayController {
         }
 
         // Respond to Abrechnung
-        ResponseEntity<Object> response = new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-        System.out.println("Got abrechnung:" + abrechnungDTO.toString());
-        return response;
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
 }
