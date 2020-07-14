@@ -170,11 +170,13 @@ public class ApiGatewayController {
     }
 
     @PostMapping("/abrechnungen/completed/notification")
-    ResponseEntity<Object> sendAbrechnungNotification(@RequestBody AbrechnungDTO abrechnungDTO) {
-        // Message frontend
-        System.out.println("Got abrechnung and messaging frontend:" + abrechnungDTO.toString());
+    ResponseEntity<Object> sendAbrechnungNotification(@RequestBody String abrechnungDTOSerialized) {
+        System.out.println("Got abrechnung and messaging frontend:" + abrechnungDTOSerialized);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+            // Parse abrechnungDTO
+            AbrechnungDTO abrechnungDTO = objectMapper.readValue(abrechnungDTOSerialized, AbrechnungDTO.class);
+            // Message frontend
             AbrechnungMessage abrechnungMessage = new AbrechnungMessage(true, null, abrechnungDTO);
             String abrechnungsMessageSerialized = objectMapper.writeValueAsString(abrechnungMessage);
             System.out.println("Sending message: " + abrechnungsMessageSerialized);

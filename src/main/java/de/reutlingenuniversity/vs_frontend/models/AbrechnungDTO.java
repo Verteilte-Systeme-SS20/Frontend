@@ -18,6 +18,9 @@ public class AbrechnungDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime timeOfAbrechnung;
 
+    public AbrechnungDTO() {
+    }
+
     public AbrechnungDTO(int tischNr, int sitzplatzNr, int abrechnungsNr, double summeBetrag, String[] positionen, LocalDateTime timeOfAbrechnung) {
         this.tischNr = tischNr;
         this.sitzplatzNr = sitzplatzNr;
