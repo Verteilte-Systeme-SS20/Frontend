@@ -78,19 +78,30 @@ function Home() {
 
     function onSockJsMessage(msg, topic) {
         console.log("Got msg", msg, topic);
-        const abrechnungsMessage = new AbrechnungsMessage(msg.successful, msg.error, msg.abrechnungDTO);
-        if (!abrechnungsMessage.successful) {
-            setDialogError("Fehler bei Abrechnungsprozess");
-            setDialogErrorDesc(abrechnungsMessage.error)
-        } else {
-            setCurrentAbrechnung(abrechnungsMessage.abrechnung);
-            setDialogAbrechnungOpen(true);
+        if (msg.abrechnungDTO !== 'undefined') {
+            const abrechnungsMessage = new AbrechnungsMessage(msg.successful, msg.error, msg.abrechnungDTO);
+            if (!abrechnungsMessage.successful) {
+                setDialogError("Fehler bei Abrechnungsprozess");
+                setDialogErrorDesc(abrechnungsMessage.error)
+            } else {
+                setCurrentAbrechnung(abrechnungsMessage.abrechnung);
+                setDialogAbrechnungOpen(true);
+            }
+            fetchDTOs();
         }
-        fetchDTOs();
     }
 
     function onSockJsConnect() {
-        console.log("WebSocket connected");
+        console.log("WebSocket connected", client);
+    }
+
+    function handleGetAbrechnung(tischNr, sitzplatzNr) {
+        const dto = {
+            tischNr,
+            sitzplatzNr
+        };
+        client.sendMessage("/app/abrechnung", JSON.stringify(dto));
+        handleAbrechnungProcessing(tischNr, sitzplatzNr);
     }
 
     return <div>
@@ -130,6 +141,7 @@ function Home() {
                 setError={setDialogError}
                 setLoading={setLoading}
                 updateUI={fetchDTOs}
+                getAbrechnung={handleGetAbrechnung}
                 handleAbrechnungProcessing={handleAbrechnungProcessing}
             />
         </Grid>

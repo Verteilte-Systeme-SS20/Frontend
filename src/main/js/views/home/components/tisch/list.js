@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function TischList(props) {
-    const { tische, gerichte, updateUI, handleAbrechnungProcessing, setError, setLoading } = props;
+    const { tische, gerichte, updateUI, getAbrechnung, setError, setLoading } = props;
     const classes = useStyles();
 
     const [currentTischNr, setCurrentTischNr] = useState(0);
@@ -54,21 +54,9 @@ function TischList(props) {
     }
 
     function handleGetAbrechnung(tischNr, sitzplatzNr) {
-        setLoading(true);
-        console.log("Abrechnung", tischNr, sitzplatzNr);
-
-        axios.get(`/api/v1/bestellungen/abrechnung/${tischNr}/${sitzplatzNr}`).then(res => {
-            console.log(res);
-            setLoading(false);
-            handleAbrechnungProcessing(tischNr, sitzplatzNr);
-        }).catch(err => {
-            setLoading(false);
-            setError(`${err.response.status} - ${err.response.data }`);
-            console.error(err);
-        });
+        getAbrechnung(tischNr, sitzplatzNr);
     }
 
-    // TODO: handleRemoveSitzplatz
     function handleAddSitzplatz(tischNr) {
         setLoading(true);
         console.log("Add sitzplatz", tischNr);

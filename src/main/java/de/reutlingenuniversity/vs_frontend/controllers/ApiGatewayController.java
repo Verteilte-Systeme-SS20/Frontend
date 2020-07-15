@@ -2,16 +2,14 @@ package de.reutlingenuniversity.vs_frontend.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.reutlingenuniversity.vs_frontend.models.AbrechnungDTO;
-import de.reutlingenuniversity.vs_frontend.models.AbrechnungMessage;
-import de.reutlingenuniversity.vs_frontend.models.GerichtDTO;
-import de.reutlingenuniversity.vs_frontend.models.TischDTO;
+import de.reutlingenuniversity.vs_frontend.models.*;
 import de.reutlingenuniversity.vs_frontend.restclients.GerichtClient;
 import de.reutlingenuniversity.vs_frontend.restclients.TableClient;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -130,12 +128,11 @@ public class ApiGatewayController {
         return response;
     }
 
-    @GetMapping("/bestellungen/abrechnung/{tischNr}/{sitzplatzNr}")
-    ResponseEntity<Object> getBestellungenByTischNrSitzplatzNr(@PathVariable("tischNr") final int tischNr,
-                                                            @PathVariable("sitzplatzNr") final int sitzplatz) {
+    @MessageMapping("/abrechnung")
+    ResponseEntity<Object> getBestellungenByTischNrSitzplatzNr(AbrechnungsAuftragMessage abrechnungsAuftragMessage) {
         ResponseEntity<Object> response;
         try {
-            response = tableClient.getBestellungenByTischNrSitzplatzNr(tischNr, sitzplatz);
+            response = tableClient.getBestellungenByTischNrSitzplatzNr(abrechnungsAuftragMessage.getTischNr(), abrechnungsAuftragMessage.getSitzplatzNr());
         } catch (FeignException e) {
             response = new ResponseEntity<>(new String(e.content()), HttpStatus.valueOf(e.status()));
         }
