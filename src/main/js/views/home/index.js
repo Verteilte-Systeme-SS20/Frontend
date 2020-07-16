@@ -78,7 +78,7 @@ function Home() {
 
     function onSockJsMessage(msg, topic) {
         console.log("Got msg", msg, topic);
-        if (msg.abrechnungDTO !== 'undefined') {
+        if (typeof msg.abrechnungDTO !== 'undefined') {
             const abrechnungsMessage = new AbrechnungsMessage(msg.successful, msg.error, msg.abrechnungDTO);
             if (!abrechnungsMessage.successful) {
                 setDialogError("Fehler bei Abrechnungsprozess");
